@@ -1,0 +1,36 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-serif: 'Playfair Display', serif;
+  --font-sans: 'Inter', sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: #f7f5f1;
+  color: #0b0b0c;
+}
+
+::selection {
+  background: #b89355;
+  color: #fff;
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  animation: reveal 0.9s ease forwards;
+}
+@keyframes reveal {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.dark-section {
+  background: #0b0b0c;
+  color: #f7f5f1;
+}

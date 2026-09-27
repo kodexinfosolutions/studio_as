@@ -1,0 +1,163 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model AdminUser {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  name      String?
+  createdAt DateTime @default(now())
+}
+
+model SiteSettings {
+  id            String   @id @default("singleton")
+  studioName    String   @default("Studio Name")
+  tagline       String   @default("Cinematic photography & films")
+  logoUrl       String?
+  faviconUrl    String?
+  phone         String?
+  whatsapp      String?
+  email         String?
+  address       String?
+  mapEmbedUrl   String?
+  businessHours String?
+  instagramUrl  String?
+  facebookUrl   String?
+  youtubeUrl    String?
+  linkedinUrl   String?
+  seoTitle      String?
+  seoDescription String?
+  seoKeywords   String?
+  ogImageUrl    String?
+  updatedAt     DateTime @updatedAt
+}
+
+model Hero {
+  id            String   @id @default("singleton")
+  backgroundImageUrl String?
+  backgroundVideoUrl String?
+  heading       String   @default("Timeless Stories, Beautifully Told")
+  subheading    String   @default("A boutique photography & film studio")
+  ctaText       String   @default("View Portfolio")
+  ctaUrl        String   @default("/portfolio")
+  secondaryCtaText String?
+  secondaryCtaUrl  String?
+  overlayIntensity Int    @default(45)
+  alignment     String   @default("center") // left | center | right
+  updatedAt     DateTime @updatedAt
+}
+
+model Service {
+  id          String   @id @default(cuid())
+  title       String
+  slug        String   @unique
+  description String
+  imageUrl    String?
+  priceLabel  String?
+  ctaText     String   @default("Enquire")
+  ctaUrl      String   @default("/contact")
+  order       Int      @default(0)
+  published   Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model PortfolioCategory {
+  id        String            @id @default(cuid())
+  name      String
+  slug      String            @unique
+  order     Int               @default(0)
+  images    PortfolioImage[]
+  createdAt DateTime          @default(now())
+}
+
+model PortfolioImage {
+  id         String            @id @default(cuid())
+  url        String
+  publicId   String?
+  title      String?
+  caption    String?
+  altText    String?
+  featured   Boolean           @default(false)
+  order      Int               @default(0)
+  category   PortfolioCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  categoryId String
+  createdAt  DateTime          @default(now())
+}
+
+model Video {
+  id           String   @id @default(cuid())
+  title        String
+  description  String?
+  videoUrl     String   // youtube/vimeo URL or uploaded video URL
+  thumbnailUrl String?
+  category     String?
+  featured     Boolean  @default(false)
+  order        Int      @default(0)
+  createdAt    DateTime @default(now())
+}
+
+model Testimonial {
+  id        String   @id @default(cuid())
+  name      String
+  review    String
+  photoUrl  String?
+  rating    Int      @default(5)
+  enabled   Boolean  @default(true)
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+}
+
+model TeamMember {
+  id        String   @id @default(cuid())
+  name      String
+  role      String
+  bio       String?
+  photoUrl  String?
+  order     Int      @default(0)
+}
+
+model Location {
+  id      String @id @default(cuid())
+  name    String
+  address String
+  mapUrl  String?
+  order   Int    @default(0)
+}
+
+model AboutContent {
+  id            String @id @default("singleton")
+  storyTitle    String @default("Our Story")
+  storyBody     String @default("Write your studio's story here.")
+  missionTitle  String @default("Our Mission")
+  missionBody   String @default("Write your mission statement here.")
+  yearsExperience Int  @default(5)
+  weddingsShot    Int  @default(100)
+  heroImageUrl  String?
+  updatedAt     DateTime @updatedAt
+}
+
+model HomepageSection {
+  id      String  @id // e.g. "hero","services","portfolio","about","videos","testimonials","instagram","contact"
+  label   String
+  enabled Boolean @default(true)
+  order   Int     @default(0)
+}
+
+model ContactSubmission {
+  id        String   @id @default(cuid())
+  name      String
+  phone     String?
+  email     String?
+  eventType String?
+  eventDate DateTime?
+  message   String?
+  status    String   @default("New") // New | Contacted | Converted | Closed
+  createdAt DateTime @default(now())
+}
